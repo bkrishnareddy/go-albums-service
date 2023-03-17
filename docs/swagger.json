@@ -1,11 +1,12 @@
 {
     "swagger": "2.0",
     "info": {
+        "title": "Album Service",
         "contact": {}
     },
     "basePath": "/api/v1",
     "paths": {
-        "/albums": {
+        "/records/albums": {
             "get": {
                 "description": "do ping",
                 "consumes": [

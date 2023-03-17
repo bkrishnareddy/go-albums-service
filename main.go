@@ -1,7 +1,6 @@
 package main
 
 import (
-	"net/http"
 	"github.com/gin-gonic/gin"
 	docs "github.com/go-albums-service/docs"
 	swaggerfiles "github.com/swaggo/files"
@@ -9,16 +8,15 @@ import (
 	"net/http"
 )
 
-type album struct{
-	ID string `json:"id"`
-	Title string `json:"title"`
-	Artist string `json:"artist"`
-	Price float64 `json:"price"`
+type album struct {
+	ID     string  `json:"id"`
+	Title  string  `json:"title"`
+	Artist string  `json:"artist"`
+	Price  float64 `json:"price"`
 }
 
-
 var album_list = []album{
-	{ID:"001",Title: "Blue Tarain", Artist: "John Cennin",Price: 109.56},
+	{ID: "001", Title: "Blue Tarain", Artist: "John Cennin", Price: 109.56},
 }
 
 // @BasePath /api/v1
@@ -31,14 +29,23 @@ var album_list = []album{
 // @Accept json
 // @Produce json
 // @Success 200 {string} Helloworld
-// @Router /albums [get]
-func getAlbums(c *gin.Context){
-	c.IndentedJSON(http.StatusOK,album_list)
+// @Router /records/albums [get]
+func getAlbums(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, album_list)
 }
 
-func main(){
+// @title Album Service
+func main() {
 	router := gin.Default()
-	router.GET("/albums", getAlbums)
+	docs.SwaggerInfo.BasePath = "/api/v1"
 
+	v1 := router.Group("/api/v1")
+	{
+		records := v1.Group("/records")
+		{
+			records.GET("/albums", getAlbums)
+		}
+	}
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	router.Run("localhost:8000")
 }
